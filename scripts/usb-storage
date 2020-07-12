@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+if [ ! -z "$UTILITY" ]; then
+  case "$BLOCK_BUTTON" in
+    1) i3-msg -q exec "$UTILITY" &>/dev/null;
+  esac
+fi
+
+if usb-devices | grep -E 'uas|usb-storage' &>/dev/null; then
+  echo ' '
+fi

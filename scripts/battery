@@ -1,0 +1,101 @@
+#!/usr/bin/env bash
+
+if [ ! -x "$(command -v acpi)" ]; then
+  echo 'acpi not found'
+  exit 1
+fi
+
+ACPI=$(acpi | head -1)
+
+STATE=$(echo "$ACPI" | awk '{split($0, a, ","); print a[1]}' | sed 's/.*:\s//')
+PERC=$(echo "$ACPI" | grep -oE "[0-9]+%" | sed 's/%$//')
+
+I3_BAR_BATTERY_CRITICAL="/tmp/I3_BAR_BATTERY_CRITICAL"
+
+if [ "$PERC" -le 20 ]; then
+  COLOR="#ff4d2e"
+elif [ "$PERC" -le 40 ]; then
+  COLOR="#ffff00"
+elif [ "$PERC" -le 60 ]; then
+  COLOR="#44b3fc"
+elif [ "$PERC" -le 80 ]; then
+  COLOR="#00ff1e"
+else
+  COLOR="white"
+fi
+
+alert () {
+  if [ ! -x "$(command -v dunstify)" ]; then
+    return
+  fi
+
+  case "$1" in
+    "show")
+      touch "$I3_BAR_BATTERY_CRITICAL" &>/dev/null
+      dunstify -u critical -i "battery-caution-charging" -a "Power Manager" "Critic level" "Battery level is "$2"%!" -r 6942069
+      ;;
+    "remove")
+      rm "$I3_BAR_BATTERY_CRITICAL" &>/dev/null
+      dunstify -C 6942069
+      ;;
+  esac
+}
+
+case "$STATE" in
+  "Discharging")
+    if [ "$PERC" -le 10 ]; then
+      ICON="<span color=\"#ff4d2e\"></span>"
+      if [ ! -f "$I3_BAR_BATTERY_CRITICAL" ]; then
+        alert show "$PERC"
+      fi
+    elif [ "$PERC" -le 20 ]; then
+      ICON=""
+    elif [ "$PERC" -le 30 ]; then
+      ICON=""
+    elif [ "$PERC" -le 40 ]; then
+      ICON=""
+    elif [ "$PERC" -le 50 ]; then
+      ICON=""
+    elif [ "$PERC" -le 60 ]; then
+      ICON=""
+    elif [ "$PERC" -le 70 ]; then
+      ICON=""
+    elif [ "$PERC" -le 80 ]; then
+      ICON=""
+    elif [ "$PERC" -le 90 ]; then
+      ICON=""
+    else
+      ICON=""
+    fi
+    ;;
+
+  "Charging")
+    if [ -f "$I3_BAR_BATTERY_CRITICAL" ]; then
+      alert remove
+    fi
+    if [ "$PERC" -le 20 ]; then
+      ICON=""
+    elif [ "$PERC" -le 30 ]; then
+      ICON=""
+    elif [ "$PERC" -le 40 ]; then
+      ICON=""
+    elif [ "$PERC" -le 60 ]; then
+      ICON=""
+    elif [ "$PERC" -le 80 ]; then
+      ICON=""
+    elif [ "$PERC" -le 90 ]; then
+      ICON=""
+    else
+      ICON=""
+    fi
+    ;;
+  "Not charging")
+    if [ -f "$I3_BAR_BATTERY_CRITICAL" ]; then
+      alert remove
+    fi
+    ICON="<span color=\"#ffff00\"></span>"
+    ;;
+esac
+
+echo ""$ICON" <span color=\""$COLOR\"">"$PERC"%</span>"
+

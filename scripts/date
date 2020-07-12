@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+ICON=""
+
+if [ -z "$SHORT_CMD" ]; then
+  SHORT_CMD="date '+%H:%M%m-%d'"
+fi
+
+if [ -z "$LONG_CMD" ]; then
+  LONG_CMD="date '+%H:%M:%S%A, %F'"
+fi
+
+SHORT_CMD=$(echo "$SHORT_CMD" | sed -E "s/^['\"](.*)['\"]$/\1/")
+LONG_CMD=$(echo "$LONG_CMD" | sed -E "s/^['\"](.*)['\"]$/\1/")
+
+LONG_FORMAT_FILE="/tmp/BAR_DATE_LONG_FORMAT"
+
+case "$BLOCK_BUTTON" in
+  1)
+    if [ -f "$LONG_FORMAT_FILE" ]; then
+      rm "$LONG_FORMAT_FILE" &>/dev/null
+    else
+      touch "$LONG_FORMAT_FILE" &>/dev/null
+    fi
+    ;;
+esac
+
+if [ -f "$LONG_FORMAT_FILE" ]; then
+  echo "$ICON" $(eval "$LONG_CMD")
+else
+  echo "$ICON" $(eval "$SHORT_CMD")
+fi

@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+if [ ! -x "$(command -v sensors)" ]; then
+  echo "lm_sensors not found"
+  exit 1
+fi
+
+TEMP=$(sensors | grep "Core 0" | awk '{print $3}' | sed -e 's/^+//' -e 's/\.[0-9]°C//')
+
+if [ "$TEMP" -le 65 ]; then
+  COLOR="#00ff1e"
+elif [ "$TEMP" -le 75 ]; then
+  COLOR="#ffff00"
+else
+  COLOR="#ff4d2e"
+fi
+
+TEMP="<span color=\""$COLOR\"">"$TEMP"°</span>"
+
+echo " "$TEMP""

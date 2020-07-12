@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+if [ ! -z "$IGNORE" ]; then
+  IGNORE=$(echo "$IGNORE" | sed -E "s/^['\"](.*)['\"]$/\1/")
+fi
+
+META=$(playerctl --ignore-player="$IGNORE" metadata 2>/dev/stdout)
+PROPS=("artist:" "album:" "title:")
+LONG_FORMAT_FILE="/tmp/I3_BAR_PLAYER_LONG_FORMAT"
+
+case "$META" in
+  "No players found") exit 1 ;;
+  "No player could handle this command") exit 1 ;;
+esac
+
+case "$BLOCK_BUTTON" in
+  1)
+    if [ -f "$LONG_FORMAT_FILE" ]; then
+      rm "$LONG_FORMAT_FILE" &>/dev/null
+    else
+      touch "$LONG_FORMAT_FILE" &>/dev/null
+    fi
+    ;;
+esac
+
+if [ -f "$LONG_FORMAT_FILE" ]; then
+  DATA=""
+
+  for prop in "${PROPS[@]}"; do
+    # Split by :
+    IFS=':'
+    read -ra ARR <<< "$prop"
+
+    CMD=$(echo "$META" | grep -E "xesam:${ARR[0]}\s+" | cut -d' ' -f 3- | sed -e 's/^\s*//' -e 's/\s*$//')
+
+    if ! [ -z "$CMD" ]; then
+      DATA+="${ARR[1]} "$CMD" "
+    fi
+  done
+
+  DATA=$(echo "$DATA" | sed 's/.$//')
+  echo "$DATA"
+else
+  echo "  "
+fi

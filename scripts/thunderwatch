@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+
+if [ ! -x "$(command -v inotifywait)" ]; then
+  echo "inotify-tools not found"
+  exit 1
+fi
+
+if [ -z "$INBOX_FILE" ]; then
+  INBOX_FILE=$(find $HOME/.thunderbird -name INBOX.msf)
+else
+  INBOX_FILE=$(echo "$INBOX_FILE" | sed -E "s/^['\"](.*)['\"]$/\1/")
+fi
+
+if [ ! -f "$INBOX_FILE" ]; then
+  echo "INBOX file not found!"
+  exit 1
+fi
+
+if [ -z "$LABEL" ]; then
+  LABEL=""
+else
+  LABEL=$(echo "$LABEL" | sed -E "s/^['\"](.*)['\"]$/\1/")
+fi
+
+mailwatch() {
+  inotifywait -q -m -e modify "$INBOX_FILE" |
+  while read -r filename event; do
+    pkill -RTMIN+10 i3blocks
+  done
+}
+
+if [ $(ps aux | grep -E "inotifywait.*"$INBOX_FILE"" | grep -v "grep" | wc -l) != "1" ]; then
+  mailwatch &>/dev/null & disown
+fi
+
+case "$BLOCK_BUTTON" in
+  1)
+    if pidof thunderbird &>/dev/null; then
+      wmctrl -xa thunderbird
+    else
+      i3-msg -q exec thunderbird
+      sleep 2
+      wmctrl -xa thunderbird
+    fi
+    ;;
+esac
+
+UNREAD_NUM=$(cat "$INBOX_FILE" | grep '(^A2=' | tail -n1 | sed -r 's/.*\(\^A2=(\w+)\).*/\1/' | xargs -n1 -L1 --replace=__ printf '%d\n' '0x__')
+
+if [ "$UNREAD_NUM" -ne 0 ]; then
+  echo ""$LABEL" "$UNREAD_NUM""
+fi

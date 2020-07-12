@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+if env LANG=en_US.UTF-8 redshift -p 2>/dev/null | grep -e 'Night' -e 'Transition' &>/dev/null; then
+  echo "⏾"
+fi
+

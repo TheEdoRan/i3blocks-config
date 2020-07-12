@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+if [ ! -x "$(command -v brightnessctl)" ]; then
+  echo 'brightnessctl not found'
+  exit 1
+fi
+
+CONNECTED=$(xrandr | grep -ce ' connected')
+
+# Laptop monitor only
+if [ "$CONNECTED" != "1" ]; then
+  exit 1
+fi
+
+case "$BLOCK_BUTTON" in
+  4) brightctl +10 &>/dev/null ;;
+  5) brightctl -10 &>/dev/null ;;
+esac
+
+echo " $(brightctl)"

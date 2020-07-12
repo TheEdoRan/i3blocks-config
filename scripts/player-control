@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+
+if [ ! -x "$(command -v playerctl)" ]; then
+  echo 'playerctl not found'
+  exit 1
+fi
+
+if [ ! -x "$(command -v wmctrl)" ]; then
+  echo 'wmctrl not found'
+  exit 1
+fi
+
+if [ ! -z "$IGNORE" ]; then
+  IGNORE=$(echo "$IGNORE" | sed -E "s/^['\"](.*)['\"]$/\1/")
+fi
+
+DATA_LONG_FORMAT_FILE="/tmp/I3_BAR_PLAYER_LONG_FORMAT"
+
+case "$BLOCK_BUTTON" in
+  1)
+    # Get percentage of click position based on width.
+    PERC=$(($relative_x*100/$width))
+
+    # Action based on button.
+    # Signal to player data when changing source.
+    if [ "$PERC" -le 36 ]; then
+      playerctl --ignore-player="$IGNORE" previous && pkill -RTMIN+7 i3blocks
+    elif [ "$PERC" -le 72 ]; then
+      playerctl --ignore-player="$IGNORE" play-pause && pkill -RTMIN+6 i3blocks
+    else
+      playerctl --ignore-player="$IGNORE" next && pkill -RTMIN+7 i3blocks
+    fi
+    ;;
+  3)
+    wmctrl -xa $(playerctl --ignore-player="$IGNORE" metadata | awk '{print $1}' | head -n1)
+    ;;
+esac
+
+OUT=' ﭠ'
+case "$(playerctl --ignore-player="$IGNORE" status 2>/dev/stdout)" in
+  "No players found") pkill -RTMIN+7 i3blocks; exit 1 ;;
+  "No player could handle this command") pkill -RTMIN+7 i3blocks; exit 1 ;;
+  "Playing") OUT+='  ' ;;
+  "Paused") OUT+='  ';;
+  "Stopped") OUT+='  ' ;;
+esac
+OUT+='ﭢ '
+
+echo "$OUT"
+
+pkill -RTMIN+7 i3blocks

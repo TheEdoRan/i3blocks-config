@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+BASE="https://wttr.in"
+
+until $(curl --output /dev/null --silent --head --fail "$BASE"); do
+  sleep 5
+done
+
+# Guess position.
+if [ -z "$LOCATION" ]; then
+  LOCATION=""
+else
+  LOCATION="/$(echo "$LOCATION" | sed -E "s/^['\"](.*)['\"]$/\1/")"
+fi
+
+URL=""$BASE""$LOCATION""
+
+case "$BLOCK_BUTTON" in
+  1)
+    xdg-open "$URL" &>/dev/null
+    ;;
+esac
+
+WEATHER=$(curl -Ss ""$URL"?format=1")
+ICON=$(echo "$WEATHER" | awk '{print $1}' | sed -e 's/[a-z]//gi')
+TEMP=$(echo "$WEATHER" | awk '{print $2}' | sed -e 's/+//' -e 's/C//' | sed -E 's/[a-z];?//gi')
+
+echo ""$ICON""$TEMP""

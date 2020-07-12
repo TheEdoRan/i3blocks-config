@@ -1,0 +1,117 @@
+# i3blocks config file
+#
+# Please see man i3blocks for a complete reference!
+# The man page is also hosted at http://vivien.github.io/i3blocks
+#
+# List of valid properties:
+#
+# align
+# color
+# command
+# full_text
+# instance
+# interval
+# label
+# min_width
+# name
+# separator
+# separator_block_width
+# short_text
+# signal
+# urgent
+
+# Global properties
+#
+# The top properties below are applied to every block, but can be overridden.
+# Each block command defaults to the script name to avoid boilerplate.
+# Change $SCRIPT_DIR to the location of your scripts!
+#separator_block_width=26
+separator_block_width=15
+markup=none
+
+[player-data]
+command=~/.config/i3blocks/scripts/player-data
+IGNORE="chromium"
+interval=once
+signal=7
+
+[player-control]
+command=~/.config/i3blocks/scripts/player-control
+IGNORE="chromium"
+interval=5
+signal=6
+
+[usb-storage]
+command=~/.config/i3blocks/scripts/usb-storage
+interval=once
+signal=5
+UTILITY=gnome-disks
+
+[arch-updates]
+command=~/.config/i3blocks/scripts/arch-updates
+UPDATE_CMD="kitty -e fish -l -i -c 'tmux new-session -A -s update "checkupdates; yay -Qua; update"'"
+AUR=true
+interval=3600
+signal=4
+
+[thunderwatch]
+command=~/.config/i3blocks/scripts/thunderwatch
+LABEL=""
+interval=once
+signal=10
+
+[keyboard-indicators]
+command=~/.config/i3blocks/scripts/keyboard-indicators
+interval=once
+markup=pango
+signal=3
+
+[weather]
+command=~/.config/i3blocks/scripts/weather
+LOCATION="Mantova"
+interval=1800
+
+[cpu-temp]
+command=~/.config/i3blocks/scripts/cpu-temp
+interval=5
+markup=pango
+
+#[nvidia-temp]
+#command=~/.config/i3blocks/scripts/nvidia-temp
+#interval=5
+#markup=pango
+
+[redshift]
+command=~/.config/i3blocks/scripts/redshift
+interval=120
+
+[dunst]
+command=~/.config/i3blocks/scripts/dunst
+interval=once
+signal=9
+markup=pango
+
+[brightness]
+command=~/.config/i3blocks/scripts/brightness
+interval=once
+signal=2
+
+[volume]
+command=~/.config/i3blocks/scripts/volume
+interval=once
+markup=pango
+signal=1
+
+[battery]
+command=~/.config/i3blocks/scripts/battery
+interval=5
+markup=pango
+
+[date]
+command=~/.config/i3blocks/scripts/date
+SHORT_CMD="date '+%H:%M %d/%m'"
+LONG_CMD="date '+%H:%M:%S  %A, %d/%m/%Y'"
+interval=1
+
+[separator]
+full_text=

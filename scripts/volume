@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+
+case "$BLOCK_BUTTON" in
+  1) volctl toggle &>/dev/null ;;
+  3) i3-msg -q exec pavucontrol ;;
+  4) volctl +5% &>/dev/null ;;
+  5) volctl -5% &>/dev/null ;;
+esac
+
+AUDIO_ON=$(amixer -q -D 'pulse' | awk '/Master/,/%/' | grep -oE '\[on\]')
+HEADPHONES=$(pacmd list-cards | grep -E ".*headphones.*available: yes")
+
+# If audio is muted
+if [ -z $AUDIO_ON ]; then
+  # Headphones not plugged.
+  if [ -z "$HEADPHONES" ]; then
+    echo "<span color=\"#aaaaaa\"> 婢 </span>"
+  else
+    echo "<span color=\"#aaaaaa\"> ﳌ </span>"
+  fi
+fi
+
+PERC=$(volctl)
+
+if [ "$PERC" -gt 100 ]; then
+  COLOR="#ff4d2e"
+else
+  COLOR="white"
+fi
+
+# Headphones not plugged.
+if [ -z "$HEADPHONES" ]; then
+  if [ "$PERC" -eq 0 ]; then
+    ICON="婢"
+  elif [ "$PERC" -le 20 ]; then
+    ICON="奄"
+  elif [ "$PERC" -le 80 ]; then
+    ICON="奔"
+  else
+    ICON="墳"
+  fi
+
+  echo ""$ICON" <span color=\""$COLOR"\">$PERC%</span>"
+
+else
+  if [ "$PERC" -eq 0 ]; then
+    echo "<span color=\""$COLOR"\">$PERC%</span> ﳌ"
+  else
+    echo " <span color=\""$COLOR"\">$PERC%</span>"
+  fi
+fi

@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+case "$BLOCK_BUTTON" in
+  1)
+    if [ -z "$UPDATE_CMD" ]; then
+      echo "UPDATE_CMD not set!"
+      exit 1
+    fi
+    UPDATE_CMD=$(echo "$UPDATE_CMD" | sed -E "s/^['\"](.*)['\"]$/\1/")
+    i3-msg -q exec $(eval "$UPDATE_CMD")
+    ;;
+esac
+if [ ! -x "$(command -v checkupdates)" ]; then
+  echo 'checkupdates not found, install pacman-contrib'
+  exit 1
+fi
+
+NUM=$(checkupdates | wc -l)
+
+if [ "$AUR" == "true" ]; then
+  if [ ! -x "$(command -v yay)" ]; then
+    echo 'yay not found'
+    exit 1
+  fi
+
+  NUM=$(("$NUM" + $(yay -Qua | wc -l)))
+fi
+
+if [ "$NUM" -ne 0 ]; then
+  echo " "$NUM""
+fi
