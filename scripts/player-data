@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if [ ! -z "$IGNORE" ]; then
+if [ -n "$IGNORE" ]; then
   IGNORE=$(echo "$IGNORE" | sed -E "s/^['\"](.*)['\"]$/\1/")
 fi
 
@@ -33,13 +33,12 @@ if [ -f "$LONG_FORMAT_FILE" ]; then
 
     CMD=$(echo "$META" | grep -E "xesam:${ARR[0]}\s+" | cut -d' ' -f 3- | sed -e 's/^\s*//' -e 's/\s*$//')
 
-    if ! [ -z "$CMD" ]; then
-      DATA+="${ARR[1]} "$CMD" "
+    if [ -n "$CMD" ]; then
+      DATA+="${ARR[1]} $CMD "
     fi
   done
 
-  DATA=$(echo "$DATA" | sed 's/.$//')
-  echo "$DATA"
+  echo "${DATA%?}"
 else
   echo "  "
 fi

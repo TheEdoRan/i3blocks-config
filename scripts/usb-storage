@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if [ ! -z "$UTILITY" ]; then
+if [ -n "$UTILITY" ]; then
   case "$BLOCK_BUTTON" in
     1) i3-msg -q exec "$UTILITY" &>/dev/null;
   esac

@@ -11,7 +11,7 @@ AUDIO_ON=$(amixer -q -D 'pulse' | awk '/Master/,/%/' | grep -oE '\[on\]')
 HEADPHONES=$(pacmd list-cards | grep -E ".*headphones.*available: yes")
 
 # If audio is muted
-if [ -z $AUDIO_ON ]; then
+if [ -z "$AUDIO_ON" ]; then
   # Headphones not plugged.
   if [ -z "$HEADPHONES" ]; then
     echo "<span color=\"#aaaaaa\"> 婢 </span>"
@@ -40,12 +40,12 @@ if [ -z "$HEADPHONES" ]; then
     ICON="墳"
   fi
 
-  echo ""$ICON" <span color=\""$COLOR"\">$PERC%</span>"
+  echo "$ICON <span color=\"$COLOR\">$PERC%</span>"
 
 else
   if [ "$PERC" -eq 0 ]; then
-    echo "<span color=\""$COLOR"\">$PERC%</span> ﳌ"
+    echo "<span color=\"$COLOR\">$PERC%</span> ﳌ"
   else
-    echo " <span color=\""$COLOR"\">$PERC%</span>"
+    echo " <span color=\"$COLOR\">$PERC%</span>"
   fi
 fi

@@ -6,7 +6,7 @@ if [ ! -x "$(command -v inotifywait)" ]; then
 fi
 
 if [ -z "$INBOX_FILE" ]; then
-  INBOX_FILE=$(find $HOME/.thunderbird -name INBOX.msf)
+  INBOX_FILE=$(find "$HOME"/.thunderbird -name INBOX.msf)
 else
   INBOX_FILE=$(echo "$INBOX_FILE" | sed -E "s/^['\"](.*)['\"]$/\1/")
 fi
@@ -24,12 +24,12 @@ fi
 
 mailwatch() {
   inotifywait -q -m -e modify "$INBOX_FILE" |
-  while read -r filename event; do
+  while read -r _ _; do
     pkill -RTMIN+10 i3blocks
   done
 }
 
-if [ $(ps aux | grep -E "inotifywait.*"$INBOX_FILE"" | grep -v "grep" | wc -l) != "1" ]; then
+if [ "$(pgrep "inotifywait.*$INBOX_FILE" | wc -l)" -ne 1 ]; then
   mailwatch &>/dev/null & disown
 fi
 
@@ -45,8 +45,8 @@ case "$BLOCK_BUTTON" in
     ;;
 esac
 
-UNREAD_NUM=$(cat "$INBOX_FILE" | grep '(^A2=' | tail -n1 | sed -r 's/.*\(\^A2=(\w+)\).*/\1/' | xargs -n1 -L1 --replace=__ printf '%d\n' '0x__')
+UNREAD_NUM=$(grep '(^A2=' "$INBOX_FILE" | tail -n1 | sed -r 's/.*\(\^A2=(\w+)\).*/\1/' | xargs -n1 -L1 --replace=__ printf '%d\n' '0x__')
 
 if [ "$UNREAD_NUM" -ne 0 ]; then
-  echo ""$LABEL" "$UNREAD_NUM""
+  echo "$LABEL $UNREAD_NUM"
 fi

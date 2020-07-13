@@ -26,7 +26,7 @@ case "$BLOCK_BUTTON" in
 esac
 
 if [ -f "$LONG_FORMAT_FILE" ]; then
-  echo "$ICON" $(eval "$LONG_CMD")
+  echo "$ICON" "$(eval "$LONG_CMD")"
 else
-  echo "$ICON" $(eval "$SHORT_CMD")
+  echo "$ICON" "$(eval "$SHORT_CMD")"
 fi

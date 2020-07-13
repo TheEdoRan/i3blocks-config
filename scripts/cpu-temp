@@ -15,6 +15,6 @@ else
   COLOR="#ff4d2e"
 fi
 
-TEMP="<span color=\""$COLOR\"">"$TEMP"°</span>"
+TEMP="<span color=\"$COLOR\">$TEMP°</span>"
 
-echo " "$TEMP""
+echo " $TEMP"

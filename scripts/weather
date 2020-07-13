@@ -2,7 +2,7 @@
 
 BASE="https://wttr.in"
 
-until $(curl --output /dev/null --silent --head --fail "$BASE"); do
+until curl --output /dev/null --silent --head --fail "$BASE"; do
   sleep 5
 done
 
@@ -13,7 +13,7 @@ else
   LOCATION="/$(echo "$LOCATION" | sed -E "s/^['\"](.*)['\"]$/\1/")"
 fi
 
-URL=""$BASE""$LOCATION""
+URL="$BASE$LOCATION"
 
 case "$BLOCK_BUTTON" in
   1)
@@ -21,8 +21,8 @@ case "$BLOCK_BUTTON" in
     ;;
 esac
 
-WEATHER=$(curl -Ss ""$URL"?format=1")
+WEATHER=$(curl -Ss "$URL?format=1")
 ICON=$(echo "$WEATHER" | awk '{print $1}' | sed -e 's/[a-z]//gi')
 TEMP=$(echo "$WEATHER" | awk '{print $2}' | sed -e 's/+//' -e 's/C//' | sed -E 's/[a-z];?//gi')
 
-echo ""$ICON""$TEMP""
+echo "$ICON$TEMP"

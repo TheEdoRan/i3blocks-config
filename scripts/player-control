@@ -10,16 +10,14 @@ if [ ! -x "$(command -v wmctrl)" ]; then
   exit 1
 fi
 
-if [ ! -z "$IGNORE" ]; then
+if [ -n "$IGNORE" ]; then
   IGNORE=$(echo "$IGNORE" | sed -E "s/^['\"](.*)['\"]$/\1/")
 fi
-
-DATA_LONG_FORMAT_FILE="/tmp/I3_BAR_PLAYER_LONG_FORMAT"
 
 case "$BLOCK_BUTTON" in
   1)
     # Get percentage of click position based on width.
-    PERC=$(($relative_x*100/$width))
+    PERC=$((relative_x*100/width))
 
     # Action based on button.
     # Signal to player data when changing source.
@@ -32,7 +30,7 @@ case "$BLOCK_BUTTON" in
     fi
     ;;
   3)
-    wmctrl -xa $(playerctl --ignore-player="$IGNORE" metadata | awk '{print $1}' | head -n1)
+    wmctrl -xa "$(playerctl --ignore-player="$IGNORE" metadata | awk '{print $1}' | head -n1)"
     ;;
 esac
 

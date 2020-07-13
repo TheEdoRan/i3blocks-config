@@ -2,14 +2,14 @@
 
 STR=""
 
-if sleep 0.1; xset -q | grep -E 'Caps Lock:\s+on' &>/dev/null; then
+if xset -q | grep -E 'Caps Lock:\s+on' &>/dev/null; then
   STR+="<span color=\"#FFA51F\"></span>"
 fi
 
-if sleep 0.1; xset -q | grep -E 'Num Lock:\s+on' &>/dev/null; then
+if xset -q | grep -E 'Num Lock:\s+on' &>/dev/null; then
   STR+="<span color=\"#BB4EFF\">  </span>"
 fi
 
-if [ ! -z "$STR" ]; then
+if [ -n "$STR" ]; then
   echo "$STR"
 fi

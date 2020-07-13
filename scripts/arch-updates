@@ -7,7 +7,7 @@ case "$BLOCK_BUTTON" in
       exit 1
     fi
     UPDATE_CMD=$(echo "$UPDATE_CMD" | sed -E "s/^['\"](.*)['\"]$/\1/")
-    i3-msg -q exec $(eval "$UPDATE_CMD")
+    i3-msg -q exec "$(eval "$UPDATE_CMD")"
     ;;
 esac
 if [ ! -x "$(command -v checkupdates)" ]; then
@@ -27,5 +27,5 @@ if [ "$AUR" == "true" ]; then
 fi
 
 if [ "$NUM" -ne 0 ]; then
-  echo " "$NUM""
+  echo " $NUM"
 fi
