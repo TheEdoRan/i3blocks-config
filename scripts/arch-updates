@@ -10,10 +10,15 @@ case "$BLOCK_BUTTON" in
     i3-msg -q exec "$(eval "$UPDATE_CMD")"
     ;;
 esac
+
 if [ ! -x "$(command -v checkupdates)" ]; then
   echo 'checkupdates not found, install pacman-contrib'
   exit 1
 fi
+
+while ! ping -q -c 1 -W 1 google.com &>/dev/null; do
+  sleep 1
+done
 
 NUM=$(checkupdates | wc -l)
 
