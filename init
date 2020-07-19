@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+# Check if ACPI files are found, for volume control.
+if [ ! -f /etc/acpi/events/jack ]; then
+  sudo tee /etc/acpi/events/jack >/dev/null <<EOF
+ACTION=="add", SUBSYSTEM=="usb", RUN="/bin/sh -c 'pkill -RTMIN+5 i3blocks'"
+ACTION=="remove", SUBSYSTEM=="usb", RUN="/bin/sh -c 'pkill -RTMIN+5 i3blocks'"
+EOF
+fi
+
+if [ ! -x /etc/acpi/headphones.sh ]; then
+  sudo tee /etc/acpi/headphones.sh >/dev/null <<EOF
+#!/usr/bin/env bash
+pkill -RTMIN+1 i3blocks
+EOF
+
+  sudo chmod +x /etc/acpi/headphones.sh
+fi
+
+# Check if udev rules are found, for power control.
+if [ ! -f /etc/udev/rules.d/10-usb.rules ]; then
+  mkdir -p /etc/udev/rules.d
+
+  sudo tee /etc/udev/rules.d/10-usb.rules >/dev/null <<EOF
+ACTION=="add", SUBSYSTEM=="usb", RUN="/bin/sh -c 'pkill -RTMIN+5 i3blocks'"
+ACTION=="remove", SUBSYSTEM=="usb", RUN="/bin/sh -c 'pkill -RTMIN+5 i3blocks'"
+EOF
+fi
+
+echo "Completed! Now you're ready to use the awesome blocklets."
