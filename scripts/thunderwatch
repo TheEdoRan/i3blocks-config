@@ -29,7 +29,7 @@ mailwatch() {
   done
 }
 
-if [ "$(pgrep "inotifywait.*$INBOX_FILE" | wc -l)" -ne 1 ]; then
+if [ "$(ps aux | grep -E "inotifywait.*$INBOX_FILE" | grep -v "grep" | wc -l)" -lt 1 ]; then
   mailwatch &>/dev/null & disown
 fi
 
