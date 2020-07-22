@@ -3,8 +3,8 @@
 # Check if ACPI files are found, for volume control.
 if [ ! -f /etc/acpi/events/jack ]; then
   sudo tee /etc/acpi/events/jack >/dev/null <<EOF
-ACTION=="add", SUBSYSTEM=="usb", RUN="/bin/sh -c 'pkill -RTMIN+5 i3blocks'"
-ACTION=="remove", SUBSYSTEM=="usb", RUN="/bin/sh -c 'pkill -RTMIN+5 i3blocks'"
+event=jack/headphone
+action=/etc/acpi/headphones.sh %e
 EOF
 fi
 
