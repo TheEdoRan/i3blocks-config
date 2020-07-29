@@ -98,7 +98,7 @@ signal=2
 
 [volume]
 command=~/.config/i3blocks/scripts/volume
-interval=once
+interval=10
 markup=pango
 signal=1
 
