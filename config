@@ -49,7 +49,7 @@ UTILITY=gnome-disks
 
 [arch-updates]
 command=~/.config/i3blocks/scripts/arch-updates
-UPDATE_CMD="kitty -e fish -l -i -c 'tmux new-session -A -s update "checkupdates; yay -Qua; update"'"
+UPDATE_CMD="alacritty -e fish -l -i -c 'tmux new-session -A -s update "checkupdates; yay -Qua; update"'"
 AUR=true
 interval=3600
 signal=4
