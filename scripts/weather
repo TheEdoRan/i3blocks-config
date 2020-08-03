@@ -6,10 +6,10 @@ until curl --output /dev/null --silent --head --fail "$BASE"; do
   sleep 5
 done
 
+LOCATION=""
+
 # Guess position.
-if [ -z "$LOCATION" ]; then
-  LOCATION=""
-else
+if [ ! -z "$LOCATION" ]; then
   LOCATION="/$(echo "$LOCATION" | sed -E "s/^['\"](.*)['\"]$/\1/")"
 fi
 
@@ -18,6 +18,9 @@ URL="$BASE$LOCATION"
 case "$BLOCK_BUTTON" in
   1)
     xdg-open "$URL" &>/dev/null
+    ;;
+  3)
+    [ ! -z "$RADAR_URL" ] && xdg-open "$(echo "$RADAR_URL" | sed -E "s/^['\"](.*)['\"]$/\1/")" &>/dev/null
     ;;
 esac
 
