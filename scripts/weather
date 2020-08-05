@@ -6,9 +6,9 @@ until curl --output /dev/null --silent --head --fail "$BASE"; do
   sleep 5
 done
 
+# If location not set, guess position.
 LOCATION=""
 
-# Guess position.
 if [ ! -z "$LOCATION" ]; then
   LOCATION="/$(echo "$LOCATION" | sed -E "s/^['\"](.*)['\"]$/\1/")"
 fi
