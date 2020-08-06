@@ -24,6 +24,8 @@ if [ ! -f /etc/udev/rules.d/10-usb.rules ]; then
   sudo tee /etc/udev/rules.d/10-usb.rules >/dev/null <<EOF
 ACTION=="add", SUBSYSTEM=="usb", RUN="/bin/sh -c 'pkill -RTMIN+5 i3blocks'"
 ACTION=="remove", SUBSYSTEM=="usb", RUN="/bin/sh -c 'pkill -RTMIN+5 i3blocks'"
+ACTION=="add", SUBSYSTEM=="block", RUN="/bin/sh -c 'pkill -RTMIN+5 i3blocks'"
+ACTION=="remove", SUBSYSTEM=="block", RUN="/bin/sh -c 'pkill -RTMIN+5 i3blocks'"
 EOF
 fi
 
