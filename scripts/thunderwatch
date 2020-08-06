@@ -45,7 +45,7 @@ case "$BLOCK_BUTTON" in
     ;;
 esac
 
-UNREAD_NUM=$(grep '(^A2=' "$INBOX_FILE" | tail -n1 | sed -r 's/.*\(\^A2=(\w+)\).*/\1/' | xargs -n1 -L1 --replace=__ printf '%d\n' '0x__')
+UNREAD_NUM=$(grep -oP "\(\^A2\=\K[\w\d]+" "$INBOX_FILE" | tail -n1 | xargs -n1 -L1 --replace=__ printf '%d\n' '0x__')
 
 if [ "$UNREAD_NUM" -ne 0 ]; then
   echo "$LABEL $UNREAD_NUM"
