@@ -3,12 +3,12 @@
 case "$BLOCK_BUTTON" in
   1) volctl toggle &>/dev/null ;;
   3) i3-msg -q exec pavucontrol ;;
-  4) volctl +5% &>/dev/null ;;
-  5) volctl -5% &>/dev/null ;;
+  4) volctl +5 &>/dev/null ;;
+  5) volctl -5 &>/dev/null ;;
 esac
 
 AUDIO_ON=$(amixer -q -D 'pipewire' | awk '/Master/,/%/' | grep -oE '\[on\]')
-HEADPHONES=$(pacmd list-cards | grep -E ".*headphones.*available: yes")
+HEADPHONES=$(pactl list sinks | grep -E ".*Headphones.*, available.*")
 
 # If audio is muted
 if [ -z "$AUDIO_ON" ]; then
@@ -49,3 +49,5 @@ else
     echo " <span color=\"$COLOR\">$PERC%</span>"
   fi
 fi
+
+
