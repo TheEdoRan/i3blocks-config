@@ -31,6 +31,6 @@ if [ "$AUR" == "true" ]; then
   NUM=$(("$NUM" + $(paru -Qua | wc -l)))
 fi
 
-# if [ "$NUM" -ne 0 ]; then
+if [ "$NUM" -ne 0 ]; then
   echo " $NUM"
-# fi
+fi

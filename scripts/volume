@@ -7,7 +7,7 @@ case "$BLOCK_BUTTON" in
   5) volctl -5% &>/dev/null ;;
 esac
 
-AUDIO_ON=$(amixer -q -D 'pulse' | awk '/Master/,/%/' | grep -oE '\[on\]')
+AUDIO_ON=$(amixer -q -D 'pipewire' | awk '/Master/,/%/' | grep -oE '\[on\]')
 HEADPHONES=$(pacmd list-cards | grep -E ".*headphones.*available: yes")
 
 # If audio is muted
