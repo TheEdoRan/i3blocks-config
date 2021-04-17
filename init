@@ -2,6 +2,8 @@
 
 # Check if ACPI files are found, for volume control.
 if [ ! -f /etc/acpi/events/jack ]; then
+  sudo mkdir -p /etc/acpi/events
+
   sudo tee /etc/acpi/events/jack >/dev/null <<EOF
 event=jack.*
 action=/etc/acpi/headphones.sh %e
@@ -9,6 +11,8 @@ EOF
 fi
 
 if [ ! -x /etc/acpi/headphones.sh ]; then
+  sudo mkdir -p /etc/acpi
+
   sudo tee /etc/acpi/headphones.sh >/dev/null <<EOF
 #!/usr/bin/env bash
 pkill -RTMIN+1 i3blocks
