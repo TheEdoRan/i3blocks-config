@@ -54,12 +54,6 @@ AUR=true
 interval=3600
 signal=4
 
-[thunderwatch]
-command=~/.config/i3blocks/scripts/thunderwatch
-LABEL=""
-interval=once
-signal=10
-
 [keyboard-indicators]
 command=~/.config/i3blocks/scripts/keyboard-indicators
 interval=once

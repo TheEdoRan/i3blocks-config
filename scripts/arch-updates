@@ -23,12 +23,12 @@ done
 NUM=$(checkupdates | wc -l)
 
 if [ "$AUR" == "true" ]; then
-  if [ ! -x "$(command -v yay)" ]; then
-    echo 'yay not found'
+  if [ ! -x "$(command -v paru)" ]; then
+    echo 'paru not found'
     exit 1
   fi
 
-  NUM=$(("$NUM" + $(yay -Qua | wc -l)))
+  NUM=$(("$NUM" + $(paru -Qua | wc -l)))
 fi
 
 if [ "$NUM" -ne 0 ]; then
