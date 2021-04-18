@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+case "$BLOCK_BUTTON" in
+  1) i3-msg -q exec "$LEFT_CLICK_CMD" ;;
+esac
+
 if [ ! -x "$(command -v sensors)" ]; then
   echo "lm_sensors not found"
   exit 1

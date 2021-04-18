@@ -66,6 +66,7 @@ interval=1800
 
 [cpu-temp]
 command=~/.config/i3blocks/scripts/cpu-temp
+LEFT_CLICK_CMD="alacritty -e htop"
 interval=5
 markup=pango
 
