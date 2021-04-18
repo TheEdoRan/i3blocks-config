@@ -31,13 +31,11 @@ markup=none
 
 [player-data]
 command=~/.config/i3blocks/scripts/player-data
-IGNORE="chromium"
 interval=once
 signal=7
 
 [player-control]
 command=~/.config/i3blocks/scripts/player-control
-IGNORE="chromium"
 interval=5
 signal=6
 
