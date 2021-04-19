@@ -1,16 +1,17 @@
 #!/usr/bin/env bash
 
-BASE="https://wttr.in"
+BASE="https://wttr.in/"
 
 until curl --output /dev/null --silent --head --fail "$BASE"; do
   sleep 5
 done
 
-# If location not set, guess position.
-LOCATION=""
 
 if [ ! -z "$LOCATION" ]; then
-  LOCATION="/$(echo "$LOCATION" | sed -E "s/^['\"](.*)['\"]$/\1/")"
+  LOCATION="$(echo "$LOCATION" | sed -E "s/^['\"](.*)['\"]$/\1/")"
+else
+  # If location not set, guess position.
+  LOCATION=""
 fi
 
 URL="$BASE$LOCATION"
@@ -25,6 +26,7 @@ case "$BLOCK_BUTTON" in
 esac
 
 WEATHER=$(curl -Ss "$URL?format=1")
+
 ICON=$(echo "$WEATHER" | awk '{print $1}' | sed -e 's/[a-z]//gi')
 TEMP=$(echo "$WEATHER" | awk '{print $2}' | sed -e 's/+//' -e 's/C//' | sed -E 's/[a-z];?//gi')
 
