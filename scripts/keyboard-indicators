@@ -3,11 +3,18 @@
 STR=""
 
 if xset -q | grep -E 'Caps Lock:\s+on' &>/dev/null; then
-  STR+="<span color=\"#FFA51F\"></span>"
+  STR+="<span color=\"#FFA51F\"> A</span>"
 fi
 
 if xset -q | grep -E 'Num Lock:\s+on' &>/dev/null; then
-  STR+="<span color=\"#BB4EFF\">  </span>"
+  # Check if caps lock is already active (not empty string),
+  # if so, put a space at the beginning of the new string.
+
+  if [ ! -z "$STR" ]; then
+    STR+=" "
+  fi
+
+  STR+="<span color=\"#BB4EFF\"> 1</span>"
 fi
 
 if [ -n "$STR" ]; then
